@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { simpleAction } from './actions/simpleAction';
+import Container from 'react-bootstrap/Container';
+import Tabs  from 'react-bootstrap/Tabs';
+import Tab  from 'react-bootstrap/Tab';
+import { Title } from './title/Title';
+import { EntryForm } from './entryForm/EntryForm';
+import { AllEntries } from './allEntries/AllEntries';
+import { AddResult } from './addResult/AddResult';
+import { AllResults } from './allResults/AllResults';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  simpleAction = (event) => {
+    this.props.simpleAction();
+  }
+
+  render () {
+    return (
+      <div>
+      <Title/>
+      <Container fluid='true'>
+      <Tabs mountOnEnter unmountOnExit>
+        <Tab eventKey='entry-form' title="Entry Form">
+          <EntryForm/>
+        </Tab>
+        <Tab eventKey='entries' title="Entries">
+          <AllEntries/>
+        </Tab>
+        <Tab eventKey='add-result' title="Add Result">
+          <AddResult/>
+        </Tab>
+        <Tab eventKey='results' title="All Results">
+          <AllResults/>
+        </Tab>
+      </Tabs>
+      </Container>
+      </div>
+    );
+  }
 }
+const mapStateToProps = state => ({
+  ...state
+});
+const mapDispatchToProps = dispatch => ({
+  simpleAction: () => dispatch(simpleAction())
+});
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
