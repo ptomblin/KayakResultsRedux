@@ -8,6 +8,7 @@ var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 require('datatables.net-buttons/js/buttons.html5.js')();
 require('datatables.net-buttons/js/buttons.print.js')();
+require('datatables.net-rowgroup-bs4');
 
 const columns = [
   { title: 'Category', data: 'category', visible: false },
@@ -35,6 +36,14 @@ const data = [
     p1addr2: 'Rochester/NY',
     p2name: '',
     p2addr2: ''
+  },
+  {
+    category: 'Kayak K-2 Mixed Male',
+    boatnumber: 'k2-2',
+    p1name: 'Paddler 1',
+    p1addr2: 'Rochester/NY',
+    p2name: 'Paddler 2',
+    p2addr2: ''
 
   }
 ];
@@ -42,7 +51,7 @@ const data = [
 export class AllEntries extends Component {
   componentDidMount () {
     $(this.refs.main).DataTable({
-      dom: '<"data-table-wrapper"t>B',
+      dom: '<"data-table-wrapper"t>pB',
       destroy: true,
       select: true,
       rowGroup: {

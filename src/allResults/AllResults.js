@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
+import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net-buttons-bs4');
@@ -9,9 +10,10 @@ var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 require('datatables.net-buttons/js/buttons.html5.js')();
 require('datatables.net-buttons/js/buttons.print.js')();
+require('datatables.net-rowgroup-bs4');
 
 const columns = [
-  { title: 'Category', data: 'category', width: '25%' },
+  { title: 'Category', data: 'category', width: '25%', visible: false },
   { title: 'Result', data: 'result', className: 'fixedTable', width: '5em' },
   { title: 'Pos.', data: 'position', className: 'fixedTable', width: '2em' },
   { title: 'Behind<br>Leader', data: 'behindLeader', className: 'fixedTable', width: '5em' },
@@ -49,13 +51,26 @@ const data = [
     p2name: '',
     p2addr2: ''
 
+  },
+  {
+    category: 'Kayak K-2 Mixed Male',
+    result: '01:02:21',
+    position: '1',
+    behindLeader: '00:00:00',
+    behindPrev: '00:00:00',
+    boatnumber: '1',
+    p1name: 'Paddler One',
+    p1addr2: 'Rochester/NY',
+    p2name: 'Paddler Two',
+    p2addr2: ''
+
   }
 ];
 
 export class AllResults extends Component {
   componentDidMount () {
     $(this.refs.main).DataTable({
-      dom: '<"data-table-wrapper"t>B',
+      dom: '<"data-table-wrapper"t>pB',
       destroy: true,
       select: true,
       rowGroup: {
@@ -96,6 +111,12 @@ export class AllResults extends Component {
   render () {
     return (
       <div>
+        <ButtonToolbar>
+          <ToggleButtonGroup type='radio' name='results-grouping' defaultValue='category'>
+            <ToggleButton value='category'>Group by Category</ToggleButton>
+            <ToggleButton value='overall'>Overall Results</ToggleButton>
+          </ToggleButtonGroup>
+        </ButtonToolbar>
         <Table striped bordered id='results-table' ref='main' />
         <Row ref='button_row' />
       </div>

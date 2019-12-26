@@ -12,3 +12,18 @@
   background-color: #17a2b8!important;
   padding-left: .4rem;
 }
+
+/* Datatables overrides */
+table.dataTable tr.dtrg-group {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+/* Other local CSSery */
+.coverUp + div {
+  z-index: 2000;
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 255, 255, .4);
+  filter: blur(2px);
+}

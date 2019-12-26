@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+
 import { AgeCategory } from './AgeCategory';
 import { GenderCategory } from './GenderCategory';
 import { BoatNumber } from './BoatNumber';
@@ -47,6 +49,13 @@ export class EntryForm extends Component {
         <AgeCategory />
         <GenderCategory />
         <BoatCategory />
+        <Form.Group as={Row}>
+          <Col sm={10}>
+            <Button variant='primary'>Save Entry</Button>
+            <Button variant='danger'>Delete Entry</Button>
+            <Button variant='warning'>Clear Entry</Button>
+          </Col>
+        </Form.Group>
       </Form>
     );
   }
