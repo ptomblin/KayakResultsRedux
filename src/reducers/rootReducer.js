@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import appReducer from './appReducer';
-import pouchErrorReducer from './pouchErrorReducer';
+import configReducer from './configReducer';
+import errorReducer from './errorReducer';
 
 export default combineReducers({
-  pouchErrorReducer,
-  appReducer
+  errorReducer,
+  configReducer
 });

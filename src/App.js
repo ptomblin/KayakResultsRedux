@@ -17,7 +17,7 @@ import RaceConfiguration from './raceConfiguration/RaceConfiguration';
 
 class App extends Component {
   render () {
-    const hasMessage = !!this.props.error_message;
+    const hasMessage = Object.keys(this.props.errors).length > 0;
     const coverClass = ''; // hasMessage ? 'coverUp' : '';
     if (this.props.config_found === STATE_PENDING) {
       return <PleaseWait />;
@@ -26,7 +26,9 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Alert variant='danger' show={hasMessage}>{this.props.error_message}</Alert>
+          {Object.keys(this.props.errors).map(ekey => (
+            <Alert variant='danger' key={ekey}>{this.props.errors[ekey]}</Alert>
+          ))}
           <Navbar variant='dark' bg='dark' className={coverClass}>
             <Navbar.Brand as={NavLink} to='/' exact>
               {this.props.title}
@@ -69,10 +71,10 @@ class App extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    config_found: state.appReducer.config_found,
-    config: state.appReducer.config,
-    title: state.appReducer.config.race_name || 'Race Entries/Results',
-    error_message: state.pouchErrorReducer.error_message
+    config_found: state.configReducer.config_found,
+    config: state.configReducer.config,
+    title: state.configReducer.config.race_name || 'Race Entries/Results',
+    errors: state.errorReducer.errors
   };
 };
 const mapDispatchToProps = dispatch => ({

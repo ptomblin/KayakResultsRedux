@@ -11,7 +11,7 @@ import { PleaseWait } from '../PleaseWait';
 import AgeCategories from './AgeCategories';
 import GenderCategories from './GenderCategories';
 import BoatClasses from './BoatClasses';
-import { pouchFetchConfig, pouchSaveConfig } from '../actions/pouchAction';
+import { fetchConfig, saveConfig } from '../actions/configAction';
 
 class RaceConfiguration extends Component {
   render () {
@@ -74,18 +74,17 @@ class RaceConfiguration extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    config_found: state.appReducer.config_found,
-    config: state.appReducer.config,
-    title: state.appReducer.config.race_name || 'Race Entries/Results',
-    error_message: state.pouchErrorReducer.error_message
+    config_found: state.configReducer.config_found,
+    config: state.configReducer.config,
+    title: state.configReducer.config.race_name || 'Race Entries/Results'
   };
 };
 const mapDispatchToProps = dispatch => ({
   onSaveClick: (config) => {
-    dispatch(pouchSaveConfig(config));
+    dispatch(saveConfig(config));
   },
   onResetClick: () => {
-    dispatch(pouchFetchConfig());
+    dispatch(fetchConfig());
   }
 });
 

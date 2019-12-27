@@ -1,6 +1,6 @@
-// Appreducer is responsible for checkint if you're logged in, the config is loaded, etc.
+// configReducer is responsible for everything to do with the configuration
 
-import { POUCH_REQUEST_FETCH_CONFIG, POUCH_RECEIVE_FETCH_CONFIG, POUCH_ERROR_CONFIG, POUCH_RECEIVE_PUT_CONFIG, POUCH_REQUEST_PUT_CONFIG } from '../actions/pouchAction';
+import { CONFIG_REQUEST_FETCH, CONFIG_RECEIVE_FETCH, CONFIG_RECEIVE_PUT, CONFIG_REQUEST_PUT, CONFIG_ERROR } from '../actions/configAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
 
 const initialState = {
@@ -113,29 +113,29 @@ const defaultRaceConfig = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case POUCH_REQUEST_FETCH_CONFIG:
+    case CONFIG_REQUEST_FETCH:
       return {
         ...state,
         config_found: STATE_PENDING
       };
-    case POUCH_RECEIVE_FETCH_CONFIG:
+    case CONFIG_RECEIVE_FETCH:
       return {
         ...state,
         config: action.config,
         config_found: action.config ? STATE_TRUE : STATE_FALSE
       };
-    case POUCH_ERROR_CONFIG:
+    case CONFIG_ERROR:
       return {
         ...state,
         config_found: STATE_ERROR,
         config: process.env.NODE_ENV !== 'production' ? defaultRaceConfig : {}
       };
-    case POUCH_REQUEST_PUT_CONFIG:
+    case CONFIG_REQUEST_PUT:
       return {
         ...state,
         config_found: STATE_PENDING
       };
-    case POUCH_RECEIVE_PUT_CONFIG:
+    case CONFIG_RECEIVE_PUT:
       return {
         ...state,
         config_found: STATE_TRUE,
