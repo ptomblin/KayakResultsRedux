@@ -1,6 +1,8 @@
 /* Bootstrap overrides */
-.tab-content>.active {
+.tab-content>.active,
+form {
   margin-top: 15px;
+  margin-left: 15px;
 }
 
 .col-form-label {
@@ -19,8 +21,17 @@ table.dataTable tr.dtrg-group {
   font-weight: bold;
 }
 
+/* Font-Awesome */
+.fa-minus-circle {
+  color: darkred;
+}
+.fa-plus-circle {
+  color: blue;
+}
+
 /* Other local CSSery */
-.coverUp + div {
+.coverUp + div,
+.coverup + form {
   z-index: 2000;
   height: 100%;
   width: 100%;

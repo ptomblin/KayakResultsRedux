@@ -1,24 +1,50 @@
 import { db, CONFIG_ID, DOC_TYPE_ENTRIES } from '../configureDB';
 
-export const POUCH_ERROR = 'POUCH_ERROR';
-export function pouchError (msg) {
+export const POUCH_SET_ERROR = 'POUCH_SET_ERROR';
+export const POUCH_RESET_ERROR = 'POUCH_RESET_ERROR';
+export function pouchSetError (msg) {
   return {
-    type: POUCH_ERROR,
+    type: POUCH_SET_ERROR,
     message: msg
   };
 }
+export function pouchResetError () {
+  return {
+    type: POUCH_RESET_ERROR
+  };
+}
 
-export const POUCH_REQUEST_CONFIG = 'POUCH_REQUEST_CONFIG';
-export const POUCH_RECEIVE_CONFIG = 'POUCH_RECEIVE_CONFIG';
+export const POUCH_REQUEST_FETCH_CONFIG = 'POUCH_REQUEST_FETCH_CONFIG';
+export const POUCH_RECEIVE_FETCH_CONFIG = 'POUCH_RECEIVE_FETCH_CONFIG';
+export const POUCH_ERROR_CONFIG = 'POUCH_ERROR_CONFIG';
+export const POUCH_REQUEST_PUT_CONFIG = 'POUCH_REQUEST_PUT_CONFIG';
+export const POUCH_RECEIVE_PUT_CONFIG = 'POUCH_RECEIVE_PUT_CONFIG';
 
 export function pouchRequestConfig () {
   return {
-    type: POUCH_REQUEST_CONFIG
+    type: POUCH_REQUEST_FETCH_CONFIG
   };
 }
 export function pouchReceiveConfig (doc) {
   return {
-    type: POUCH_RECEIVE_CONFIG,
+    type: POUCH_RECEIVE_FETCH_CONFIG,
+    config: doc
+  };
+}
+export function pouchErrorConfig () {
+  return {
+    type: POUCH_ERROR_CONFIG
+  };
+}
+export function pouchRequestPutConfig () {
+  return {
+    type: POUCH_REQUEST_PUT_CONFIG
+  };
+}
+export function pouchReceivePutConfig (doc) {
+  console.log(doc);
+  return {
+    type: POUCH_RECEIVE_PUT_CONFIG,
     config: doc
   };
 }
@@ -32,7 +58,20 @@ export function pouchFetchConfig () {
         dispatch(pouchReceiveConfig(doc));
       })
       .catch(err => {
-        dispatch(pouchError(err.name === 'not_found' ? 'Race Configuration not found' : err.message));
+        dispatch(pouchErrorConfig());
+        dispatch(pouchSetError(err.name === 'not_found' ? 'Race Configuration not found' : err.message));
+      });
+  };
+}
+// Save race config back to PouchDB
+export function pouchSaveConfig (config) {
+  return dispatch => {
+    dispatch(pouchRequestPutConfig());
+    return db.put({ ...config, _id: CONFIG_ID })
+      .then(res => dispatch(pouchReceivePutConfig({ ...config, _rev: res.rev })))
+      .catch(err => {
+        dispatch(pouchErrorConfig());
+        dispatch(pouchSetError(err.message));
       });
   };
 }
@@ -60,7 +99,7 @@ export function pouchFetchRaceEntries () {
       selector: { type: DOC_TYPE_ENTRIES }
     })
       .then(response => dispatch(pouchReceiveRaceEntries(response)))
-      .catch(err => dispatch(pouchError(err)));
+      .catch(err => dispatch(pouchSetError(err)));
   };
 }
 
@@ -84,7 +123,7 @@ export function pouchPutEntry (entry) {
     dispatch(pouchRequestPutEntry());
     return db.put(entry)
       .then(res => dispatch(pouchReceivePutEntry()))
-      .catch(err => dispatch(pouchError(err)));
+      .catch(err => dispatch(pouchSetError(err)));
   };
 }
 
@@ -108,7 +147,7 @@ export function pouchDeleteEntry (entry) {
     dispatch(pouchRequestDeleteEntry());
     return db.remove(entry._id, entry._rev)
       .then(res => dispatch(pouchReceiveDeleteEntry()))
-      .catch(err => dispatch(pouchError(err)));
+      .catch(err => dispatch(pouchSetError(err)));
   };
 }
 
@@ -135,6 +174,6 @@ export function pouchGetEntryByBoatNumber (boatNumber) {
       selector: { boatnumber: boatNumber }
     })
       .then(res => dispatch(pouchGetEntryByBoatNumber(res.docs)))
-      .catch(err => dispatch(pouchError(err)));
+      .catch(err => dispatch(pouchSetError(err)));
   };
 }
