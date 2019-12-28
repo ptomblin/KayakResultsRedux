@@ -3,7 +3,7 @@
 import {
   CONFIG_REQUEST_FETCH, CONFIG_RECEIVE_FETCH, CONFIG_RECEIVE_PUT, CONFIG_REQUEST_PUT, CONFIG_ERROR,
   CONFIG_REMOVE_FROM_CATEGORY, CONFIG_ADD_TO_CATEGORY, CONFIG_REMOVE_FROM_BOAT_CATEGORY, CONFIG_ADD_TO_BOAT_CATEGORY,
-  CONFIG_ADD_TO_BOAT_CLASS, CONFIG_REMOVE_FROM_BOAT_CLASS
+  CONFIG_ADD_TO_BOAT_CLASS, CONFIG_REMOVE_FROM_BOAT_CLASS, CONFIG_UPDATE_RACE_NAME, CONFIG_UPDATE_RACE_DATE
 } from '../actions/configAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
 
@@ -116,6 +116,7 @@ const defaultRaceConfig = {
 };
 
 export default (state = initialState, action) => {
+  console.log(action);
   switch (action.type) {
     case CONFIG_REQUEST_FETCH:
       return {
@@ -207,6 +208,10 @@ export default (state = initialState, action) => {
         config: confCopy
       };
     }
+    case CONFIG_UPDATE_RACE_NAME:
+      return { ...state, config: { ...state.config, race_name: action.race_name } };
+    case CONFIG_UPDATE_RACE_DATE:
+      return { ...state, config: { ...state.config, race_date: action.race_date } };
     default:
       return state;
   }

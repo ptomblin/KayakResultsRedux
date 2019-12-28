@@ -11,17 +11,9 @@ import { PleaseWait } from '../PleaseWait';
 import AgeCategories from './AgeCategories';
 import GenderCategories from './GenderCategories';
 import BoatClasses from './BoatClasses';
-import { fetchConfig, saveConfig } from '../actions/configAction';
+import { fetchConfig, saveConfig, updateRaceNameConfig, updateRaceDateConfig } from '../actions/configAction';
 
 class RaceConfiguration extends Component {
-  componentDidMount () {
-    console.log('component did mount');
-  }
-
-  componentDidUpdate () {
-    console.log('component did update');
-  }
-
   render () {
     if (this.props.config_found === STATE_PENDING) {
       return <PleaseWait />;
@@ -36,7 +28,7 @@ class RaceConfiguration extends Component {
             Race Name
             </Form.Label>
             <Col sm={8}>
-              <Form.Control type='text' placeholder='Race Name' defaultValue={this.props.config.race_name} />
+              <Form.Control type='text' placeholder='Race Name' value={this.props.config.race_name} onChange={this.props.handleUpdateRaceName} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -44,7 +36,7 @@ class RaceConfiguration extends Component {
             Race Date
             </Form.Label>
             <Col sm={8}>
-              <Form.Control type='text' placeholder='Race Date' defaultValue={this.props.config.race_date} />
+              <Form.Control type='text' placeholder='Race Date' value={this.props.config.race_date} onChange={this.props.handleUpdateRaceDate} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -88,6 +80,12 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = dispatch => ({
+  handleUpdateRaceName: (e) => {
+    dispatch(updateRaceNameConfig(e.target.value));
+  },
+  handleUpdateRaceDate: (e) => {
+    dispatch(updateRaceDateConfig(e.target.value));
+  },
   onSaveClick: (config) => {
     dispatch(saveConfig(config));
   },

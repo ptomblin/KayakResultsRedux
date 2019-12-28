@@ -174,3 +174,31 @@ export function addEntryToBoatClassConfig (category, item) {
     dispatch(configAddBoatClass(category, item));
   };
 }
+
+export const CONFIG_UPDATE_RACE_NAME = 'CONFIG_UPDATE_RACE_NAME';
+export function configUpdateRaceName (raceName) {
+  return {
+    type: CONFIG_UPDATE_RACE_NAME,
+    race_name: raceName
+  };
+}
+
+export function updateRaceNameConfig (raceName) {
+  return dispatch => {
+    dispatch(configUpdateRaceName(raceName));
+  };
+}
+
+export const CONFIG_UPDATE_RACE_DATE = 'CONFIG_UPDATE_RACE_DATE';
+export function configUpdateRaceDate (raceDate) {
+  return {
+    type: CONFIG_UPDATE_RACE_DATE,
+    race_date: raceDate
+  };
+}
+
+export function updateRaceDateConfig (raceDate) {
+  return dispatch => {
+    dispatch(configUpdateRaceDate(raceDate));
+  };
+}
