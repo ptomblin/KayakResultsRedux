@@ -12,12 +12,11 @@ import { removeEntryFromBoatCategoryConfig, addEntryToBoatCategoryConfig, remove
 class BoatClasses extends Component {
   constructor (props) {
     super(props);
-    this.boatClassValues = {};
+    this.state = { };
   }
 
   setBoatClass (category, value) {
-    this.boatClassValues[category] = value;
-    console.log(this.boatClassValues);
+    this.setState({ [category]: value });
   }
 
   boatClass (boatCategory) {
@@ -67,15 +66,15 @@ class BoatClasses extends Component {
                         <Form.Control
                           placeholder='New Boat Class'
                           onChange={e => this.setBoatClass(bcat.category, e.target.value)}
-                          ref={bcat.category}
+                          value={this.state[bcat.category]}
                         />
                       </Col>
                       <Col>
                         <Button
                           variant='primary'
                           onClick={() => {
-                            this.props.onAddClass(bcat.category, this.refs[bcat.category].value);
-                            this.refs[bcat.category].value = '';
+                            this.props.onAddClass(bcat.category, this.state[bcat.category]);
+                            this.setState({ [bcat.category]: '' });
                           }}
                         >Add New Boat Class
                         </Button>
