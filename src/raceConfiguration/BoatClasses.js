@@ -12,11 +12,20 @@ import { removeEntryFromBoatCategoryConfig, addEntryToBoatCategoryConfig, remove
 class BoatClasses extends Component {
   constructor (props) {
     super(props);
-    this.state = { };
+    // believe it or not, looping is faster than Array.reduce!
+    const bcats = {};
+    for (var i = 0; i < this.props.boat_categories.length; i++) {
+      bcats[this.props.boat_categories[i].category] = '';
+    }
+    this.state = { new_boat_categories: '', new_boat_classes: bcats };
   }
 
   setBoatClass (category, value) {
-    this.setState({ [category]: value });
+    this.setState({ new_boat_classes: { ...this.state.new_boat_classes, [category]: value } });
+  }
+
+  setBoatCategory (value) {
+    this.setState({ new_boat_categories: value });
   }
 
   boatClass (boatCategory) {
@@ -66,15 +75,15 @@ class BoatClasses extends Component {
                         <Form.Control
                           placeholder='New Boat Class'
                           onChange={e => this.setBoatClass(bcat.category, e.target.value)}
-                          value={this.state[bcat.category]}
+                          value={this.state.new_boat_classes[bcat.category]}
                         />
                       </Col>
                       <Col>
                         <Button
                           variant='primary'
                           onClick={() => {
-                            this.props.onAddClass(bcat.category, this.state[bcat.category]);
-                            this.setState({ [bcat.category]: '' });
+                            this.props.onAddClass(bcat.category, this.state.new_boat_classes[bcat.category]);
+                            this.setBoatClass(bcat.category, '');
                           }}
                         >Add New Boat Class
                         </Button>
@@ -88,14 +97,19 @@ class BoatClasses extends Component {
           <ListGroup.Item key='add'>
             <Form.Row>
               <Col>
-                <Form.Control placeholder='New Boat Category' ref='newCategory' />
+                <Form.Control
+                  placeholder='New Boat Category'
+                  onChange={e => this.setBoatCategory(e.target.value)}
+                  value={this.state.new_boat_categories}
+                />
               </Col>
               <Col>
                 <Button
                   variant='primary'
                   onClick={() => {
-                    this.props.onAddCategory(this.refs.newCategory.value);
-                    this.refs.newCategory.value = '';
+                    this.props.onAddCategory(this.state.new_boat_categories);
+                    this.setBoatClass(this.state.new_boat_categories, '');
+                    this.setBoatCategory('');
                   }}
                 >Add New Boat Category
                 </Button>

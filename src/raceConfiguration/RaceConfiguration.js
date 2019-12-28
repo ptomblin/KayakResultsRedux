@@ -14,6 +14,14 @@ import BoatClasses from './BoatClasses';
 import { fetchConfig, saveConfig } from '../actions/configAction';
 
 class RaceConfiguration extends Component {
+  componentDidMount () {
+    console.log('component did mount');
+  }
+
+  componentDidUpdate () {
+    console.log('component did update');
+  }
+
   render () {
     if (this.props.config_found === STATE_PENDING) {
       return <PleaseWait />;

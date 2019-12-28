@@ -11,6 +11,15 @@ import { connect } from 'react-redux';
 import { removeEntryFromAgeCategoryConfig, addEntryToAgeCategoryConfig } from '../actions/configAction';
 
 class AgeCategories extends Component {
+  constructor (props) {
+    super(props);
+    this.state = { new_age_category: '' };
+  }
+
+  setAgeCategory (value) {
+    this.setState({ new_age_category: value });
+  }
+
   render () {
     return (
       <Form.Group as={Row}>
@@ -25,7 +34,7 @@ class AgeCategories extends Component {
                   <FontAwesomeIcon
                     icon={faMinusCircle}
                     onClick={() => {
-                      this.props.onRemoveKey(ag);
+                      this.props.onRemoveCategory(ag);
                     }}
                   />
                 </div>
@@ -35,14 +44,18 @@ class AgeCategories extends Component {
           <ListGroup.Item key='add'>
             <Form.Row>
               <Col>
-                <Form.Control placeholder='New Age Category' ref='new' />
+                <Form.Control
+                  placeholder='New Age Category'
+                  onChange={e => this.setAgeCategory(e.target.value)}
+                  value={this.state.new_age_category}
+                />
               </Col>
               <Col>
                 <Button
                   variant='primary'
                   onClick={() => {
-                    this.props.onAddKey(this.refs.new.value);
-                    this.refs.new.value = '';
+                    this.props.onAddCategory(this.state.new_age_category);
+                    this.setAgeCategory('');
                   }}
                 >Add New Age Category
                 </Button>
@@ -61,10 +74,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = dispatch => ({
-  onRemoveKey: (key) => {
+  onRemoveCategory: (key) => {
     dispatch(removeEntryFromAgeCategoryConfig(key));
   },
-  onAddKey: (val) => {
+  onAddCategory: (val) => {
     dispatch(addEntryToAgeCategoryConfig(val));
   }
 });

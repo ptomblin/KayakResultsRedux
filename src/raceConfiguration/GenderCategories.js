@@ -10,6 +10,15 @@ import { connect } from 'react-redux';
 import { removeEntryFromGenderCategoryConfig, addEntryToGenderCategoryConfig } from '../actions/configAction';
 
 class GenderCategories extends Component {
+  constructor (props) {
+    super(props);
+    this.state = { new_gender_category: '' };
+  }
+
+  setGenderCategory (value) {
+    this.setState({ new_gender_category: value });
+  }
+
   render () {
     return (
       <Form.Group as={Row}>
@@ -24,7 +33,7 @@ class GenderCategories extends Component {
                   <FontAwesomeIcon
                     icon={faMinusCircle}
                     onClick={() => {
-                      this.props.onRemoveKey(gc);
+                      this.props.onRemoveCategory(gc);
                     }}
                   />
                 </div>
@@ -34,14 +43,18 @@ class GenderCategories extends Component {
           <ListGroup.Item key='add'>
             <Form.Row>
               <Col>
-                <Form.Control placeholder='New Gender Category' ref='new' />
+                <Form.Control
+                  placeholder='New Gender Category'
+                  onChange={e => this.setGenderCategory(e.target.value)}
+                  value={this.state.new_gender_category}
+                />
               </Col>
               <Col>
                 <Button
                   variant='primary'
                   onClick={() => {
-                    this.props.onAddKey(this.refs.new.value);
-                    this.refs.new.value = '';
+                    this.props.onAddCategory(this.state.new_gender_category);
+                    this.setGenderCategory('');
                   }}
                 >Add New Gender Category
                 </Button>
@@ -63,7 +76,7 @@ const mapDispatchToProps = dispatch => ({
   onRemoveCategory: (key) => {
     dispatch(removeEntryFromGenderCategoryConfig(key));
   },
-  onAddKey: (val) => {
+  onAddCategory: (val) => {
     dispatch(addEntryToGenderCategoryConfig(val));
   }
 });
