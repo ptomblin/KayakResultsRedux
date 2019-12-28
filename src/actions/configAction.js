@@ -45,7 +45,14 @@ export function fetchConfig () {
     dispatch(requestFetchConfig());
     return db.get(CONFIG_ID)
       .then(doc => {
-        dispatch(receiveFetchConfig(doc));
+        // Handle transition to new name
+        const newDoc = { ...doc };
+        // if (doc.boat_classes) {
+        //   newDoc.boat_categories = doc.boat_classes;
+        //   delete newDoc.boat_classes;
+        //   saveConfig(newDoc);
+        // }
+        dispatch(receiveFetchConfig(newDoc));
       })
       .catch(err => {
         dispatch(configHasError());
@@ -64,5 +71,106 @@ export function saveConfig (config) {
         dispatch(configHasError());
         dispatch(setError(errorSource, err.message));
       });
+  };
+}
+
+// Remove a specific entry from one of the categories (age, gender)
+export const CONFIG_REMOVE_FROM_CATEGORY = 'CONFIG_REMOVE_FROM_CATEGORY';
+export function configRemoveCategory (category, item) {
+  return {
+    type: CONFIG_REMOVE_FROM_CATEGORY,
+    category: category,
+    item: item
+  };
+}
+
+export function removeEntryFromAgeCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configRemoveCategory('age_categories', item));
+  };
+}
+
+export function removeEntryFromGenderCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configRemoveCategory('gender_categories', item));
+  };
+}
+
+export const CONFIG_ADD_TO_CATEGORY = 'CONFIG_ADD_TO_CATEGORY';
+export function configAddCategory (category, item) {
+  return {
+    type: CONFIG_ADD_TO_CATEGORY,
+    category: category,
+    item: item
+  };
+}
+
+export function addEntryToAgeCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configAddCategory('age_categories', item));
+  };
+}
+
+export function addEntryToGenderCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configAddCategory('gender_categories', item));
+  };
+}
+
+export const CONFIG_REMOVE_FROM_BOAT_CATEGORY = 'CONFIG_REMOVE_FROM_BOAT_CATEGORY';
+export function configRemoveBoatCategory (item) {
+  return {
+    type: CONFIG_REMOVE_FROM_BOAT_CATEGORY,
+    item: item
+  };
+}
+
+export function removeEntryFromBoatCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configRemoveBoatCategory(item));
+  };
+}
+
+export const CONFIG_ADD_TO_BOAT_CATEGORY = 'CONFIG_ADD_TO_BOAT_CATEGORY';
+export function configAddBoatCategory (item) {
+  return {
+    type: CONFIG_ADD_TO_BOAT_CATEGORY,
+    item: item
+  };
+}
+
+export function addEntryToBoatCategoryConfig (item) {
+  return dispatch => {
+    dispatch(configAddBoatCategory(item));
+  };
+}
+
+export const CONFIG_REMOVE_FROM_BOAT_CLASS = 'CONFIG_REMOVE_FROM_BOAT_CLASS';
+export function configRemoveBoatClass (category, item) {
+  return {
+    type: CONFIG_REMOVE_FROM_BOAT_CLASS,
+    category: category,
+    item: item
+  };
+}
+
+export function removeEntryFromBoatClassConfig (category, item) {
+  return dispatch => {
+    dispatch(configRemoveBoatClass(category, item));
+  };
+}
+
+export const CONFIG_ADD_TO_BOAT_CLASS = 'CONFIG_ADD_TO_BOAT_CLASS';
+export function configAddBoatClass (category, item) {
+  return {
+    type: CONFIG_ADD_TO_BOAT_CLASS,
+    category: category,
+    item: item
+  };
+}
+
+export function addEntryToBoatClassConfig (category, item) {
+  return dispatch => {
+    dispatch(configAddBoatClass(category, item));
   };
 }

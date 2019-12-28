@@ -1,6 +1,10 @@
 // configReducer is responsible for everything to do with the configuration
 
-import { CONFIG_REQUEST_FETCH, CONFIG_RECEIVE_FETCH, CONFIG_RECEIVE_PUT, CONFIG_REQUEST_PUT, CONFIG_ERROR } from '../actions/configAction';
+import {
+  CONFIG_REQUEST_FETCH, CONFIG_RECEIVE_FETCH, CONFIG_RECEIVE_PUT, CONFIG_REQUEST_PUT, CONFIG_ERROR,
+  CONFIG_REMOVE_FROM_CATEGORY, CONFIG_ADD_TO_CATEGORY, CONFIG_REMOVE_FROM_BOAT_CATEGORY, CONFIG_ADD_TO_BOAT_CATEGORY,
+  CONFIG_ADD_TO_BOAT_CLASS, CONFIG_REMOVE_FROM_BOAT_CLASS
+} from '../actions/configAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
 
 const initialState = {
@@ -23,7 +27,7 @@ const defaultRaceConfig = {
     'Female',
     'Mixed'
   ],
-  boat_classes: [
+  boat_categories: [
     {
       category: 'Guideboat',
       classes: [
@@ -141,6 +145,68 @@ export default (state = initialState, action) => {
         config_found: STATE_TRUE,
         config: action.config
       };
+    case CONFIG_REMOVE_FROM_CATEGORY:
+    {
+      const confCopy = { ...state.config };
+      confCopy[action.category] = confCopy[action.category].filter(ac => ac !== action.item);
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
+    case CONFIG_ADD_TO_CATEGORY:
+    {
+      const confCopy = { ...state.config };
+      confCopy[action.category] = [...confCopy[action.category], action.item];
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
+    case CONFIG_REMOVE_FROM_BOAT_CATEGORY:
+    {
+      const confCopy = { ...state.config };
+      confCopy.boat_categories = confCopy.boat_categories.filter(bc => bc.category !== action.item);
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
+    case CONFIG_ADD_TO_BOAT_CATEGORY:
+    {
+      const confCopy = { ...state.config };
+      const newCategory = {
+        category: action.item,
+        classes: []
+      };
+      confCopy.boat_categories = [...confCopy.boat_categories, newCategory];
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
+    case CONFIG_REMOVE_FROM_BOAT_CLASS:
+    {
+      const confCopy = { ...state.config, boat_categories: [...state.config.boat_categories] };
+      // Find the one in boat_categories to edit (find doesn't make a copy, but we've already make a copy above)
+      const catCopy = confCopy.boat_categories.find(bc => bc.category === action.category);
+      catCopy.classes = catCopy.classes.filter(cl => cl.Name !== action.item);
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
+    case CONFIG_ADD_TO_BOAT_CLASS:
+    {
+      const confCopy = { ...state.config, boat_categories: [...state.config.boat_categories] };
+      // Find the one in boat_categories to edit (find doesn't make a copy, but we've already make a copy above)
+      const catCopy = confCopy.boat_categories.find(bc => bc.category === action.category);
+      catCopy.classes = [...catCopy.classes, { Name: action.item, hasCrew: false }];
+      return {
+        ...state,
+        config: confCopy
+      };
+    }
     default:
       return state;
   }
