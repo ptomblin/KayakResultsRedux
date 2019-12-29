@@ -8,16 +8,15 @@ import Nav from 'react-bootstrap/Nav';
 import Alert from 'react-bootstrap/Alert';
 
 import { EntryForm } from './entryForm/EntryForm';
-import { AllEntries } from './allEntries/AllEntries';
+import AllEntries from './allEntries/AllEntries';
 import { AddResult } from './addResult/AddResult';
 import { AllResults } from './allResults/AllResults';
 import { PleaseWait } from './PleaseWait';
-import { STATE_PENDING, STATE_FALSE, STATE_ERROR } from './configureDB';
+import { STATE_PENDING } from './configureDB';
 import RaceConfiguration from './raceConfiguration/RaceConfiguration';
 
 class App extends Component {
   render () {
-    const hasMessage = Object.keys(this.props.errors).length > 0;
     const coverClass = ''; // hasMessage ? 'coverUp' : '';
     if (this.props.config_found === STATE_PENDING) {
       return <PleaseWait />;

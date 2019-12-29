@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Table from 'react-bootstrap/Table';
 
 const $ = require('jquery');
@@ -49,8 +51,13 @@ const data = [
 ];
 
 export class AllEntries extends Component {
+  constructor (props) {
+    super(props);
+    this.state = { table: null };
+  }
+
   componentDidMount () {
-    $(this.refs.main).DataTable({
+    const tbl = $(this.refs.main).DataTable({
       dom: '<"data-table-wrapper"t>pB',
       destroy: true,
       select: true,
@@ -60,7 +67,7 @@ export class AllEntries extends Component {
       orderFixed: [
         [0, 'asc']
       ],
-      data: data,
+      data: this.props.entries,
       columns,
       searching: false,
       lengthChange: true,
@@ -76,13 +83,12 @@ export class AllEntries extends Component {
         'csvHtml5'
       ]
     });
+    this.setState({ table: tbl });
   }
 
   componentWillUnmount () {
-    $('.data-table-wrapper')
-      .find('table')
-      .DataTable()
-      .destroy(true);
+    this.state.table.destroy(true);
+    this.setState({ table: null });
   }
 
   shouldComponentUpdate () {
@@ -97,3 +103,15 @@ export class AllEntries extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  console.log(state);
+  return {
+    entries: state.raceEntriesReducer.entries
+  };
+};
+const mapDispatchToProps = dispatch => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllEntries);

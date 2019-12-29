@@ -31,7 +31,6 @@ export function requestPutConfig () {
   };
 }
 export function receivePutConfig (doc) {
-  console.log(doc);
   return {
     type: CONFIG_RECEIVE_PUT,
     config: doc

@@ -19,9 +19,10 @@ export function requestFetchRaceEntries () {
   };
 }
 export function receiveFetchRaceEntries (response) {
+  console.log(response);
   return {
     type: RACE_ENTRIES_RECEIVE_FETCH,
-    entries: response.docs
+    entries: response.docs.map(val => val.doc)
   };
 }
 
@@ -35,6 +36,7 @@ export function fetchRaceEntries () {
     })
       .then(response => dispatch(receiveFetchRaceEntries(response)))
       .catch(err => {
+        console.log(err);
         dispatch(raceEntriesHasError());
         dispatch(setError(errorSource, err));
       });
