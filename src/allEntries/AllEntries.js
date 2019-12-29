@@ -21,35 +21,6 @@ const columns = [
   { title: 'Addr 2', data: 'p2addr2', width: '15%' }
 ];
 
-// test only:
-const data = [
-  {
-    category: 'Kayak K-1 Unlimited Over 50 Male',
-    boatnumber: '72',
-    p1name: 'Paul Tomblin',
-    p1addr2: 'Rochester/NY',
-    p2name: '',
-    p2addr2: ''
-  },
-  {
-    category: 'Kayak K-1 Unlimited Over 50 Male',
-    boatnumber: '1',
-    p1name: 'Mike Finear',
-    p1addr2: 'Rochester/NY',
-    p2name: '',
-    p2addr2: ''
-  },
-  {
-    category: 'Kayak K-2 Mixed Male',
-    boatnumber: 'k2-2',
-    p1name: 'Paddler 1',
-    p1addr2: 'Rochester/NY',
-    p2name: 'Paddler 2',
-    p2addr2: ''
-
-  }
-];
-
 export class AllEntries extends Component {
   constructor (props) {
     super(props);
@@ -84,9 +55,11 @@ export class AllEntries extends Component {
       ]
     });
     this.setState({ table: tbl });
+    console.log('AllEntries did mount, tbl = ' + tbl);
   }
 
   componentWillUnmount () {
+    console.log('AllEntries will unmount, table = ' + this.state.table);
     this.state.table.destroy(true);
     this.setState({ table: null });
   }

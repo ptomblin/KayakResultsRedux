@@ -15,13 +15,24 @@ class BoatClasses extends Component {
     // believe it or not, looping is faster than Array.reduce!
     const bcats = {};
     for (var i = 0; i < this.props.boat_categories.length; i++) {
-      bcats[this.props.boat_categories[i].category] = '';
+      bcats[this.props.boat_categories[i].category] = { Name: '', hasCrew: false };
     }
     this.state = { new_boat_categories: '', new_boat_classes: bcats };
   }
 
-  setBoatClass (category, value) {
-    this.setState({ new_boat_classes: { ...this.state.new_boat_classes, [category]: value } });
+  setBoatClassName (category, value) {
+    const valStruct = { ...this.state.new_boat_classes[category], Name: value };
+    this.setState({ new_boat_classes: { ...this.state.new_boat_classes, [category]: valStruct } });
+  }
+
+  setBoatClassCrew (category, checked) {
+    const valStruct = { ...this.state.new_boat_classes[category], hasCrew: checked };
+    this.setState({ new_boat_classes: { ...this.state.new_boat_classes, [category]: valStruct } });
+  }
+
+  resetBoatClass (category) {
+    const valStruct = { Name: '', hasCrew: false };
+    this.setState({ new_boat_classes: { ...this.state.new_boat_classes, [category]: valStruct } });
   }
 
   setBoatCategory (value) {
@@ -34,6 +45,7 @@ class BoatClasses extends Component {
         <ListGroup.Item key={bclass.Name}>
           <div className='d-flex'>
             <div className='flex-grow-1'>{bclass.Name}</div>
+            <div><Form.Check checked={bclass.hasCrew} label='Has Crew' disabled /></div>
             <div>
               <FontAwesomeIcon
                 icon={faMinusCircle}
@@ -74,8 +86,17 @@ class BoatClasses extends Component {
                       <Col>
                         <Form.Control
                           placeholder='New Boat Class'
-                          onChange={e => this.setBoatClass(bcat.category, e.target.value)}
-                          value={this.state.new_boat_classes[bcat.category]}
+                          onChange={e => this.setBoatClassName(bcat.category, e.target.value)}
+                          value={this.state.new_boat_classes[bcat.category].Name}
+                        />
+                      </Col>
+                      <Col sm={2}>
+                        <Form.Check
+                          label='Has Crew'
+                          inline
+                          type='checkbox'
+                          onChange={e => this.setBoatClassCrew(bcat.category, e.target.checked)}
+                          checked={this.state.new_boat_classes[bcat.category].hasCrew}
                         />
                       </Col>
                       <Col>
@@ -83,7 +104,7 @@ class BoatClasses extends Component {
                           variant='primary'
                           onClick={() => {
                             this.props.onAddClass(bcat.category, this.state.new_boat_classes[bcat.category]);
-                            this.setBoatClass(bcat.category, '');
+                            this.resetBoatClass(bcat.category);
                           }}
                         >Add New Boat Class
                         </Button>
@@ -108,7 +129,7 @@ class BoatClasses extends Component {
                   variant='primary'
                   onClick={() => {
                     this.props.onAddCategory(this.state.new_boat_categories);
-                    this.setBoatClass(this.state.new_boat_categories, '');
+                    this.resetBoatClass(this.state.new_boat_categories);
                     this.setBoatCategory('');
                   }}
                 >Add New Boat Category

@@ -201,7 +201,7 @@ export default (state = initialState, action) => {
       const confCopy = { ...state.config, boat_categories: [...state.config.boat_categories] };
       // Find the one in boat_categories to edit (find doesn't make a copy, but we've already make a copy above)
       const catCopy = confCopy.boat_categories.find(bc => bc.category === action.category);
-      catCopy.classes = [...catCopy.classes, { Name: action.item, hasCrew: false }];
+      catCopy.classes = [...catCopy.classes, action.item];
       return {
         ...state,
         config: confCopy

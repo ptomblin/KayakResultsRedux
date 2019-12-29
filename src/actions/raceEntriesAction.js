@@ -12,6 +12,7 @@ export function raceEntriesHasError () {
 
 export const RACE_ENTRIES_REQUEST_FETCH = 'RACE_ENTRIES_REQUEST_FETCH';
 export const RACE_ENTRIES_RECEIVE_FETCH = 'RACE_ENTRIES_RECEIVE_FETCH';
+export const RACE_ENTRIES_CLEAR = 'RACE_ENTRIES_CLEAR';
 
 export function requestFetchRaceEntries () {
   return {
@@ -23,6 +24,11 @@ export function receiveFetchRaceEntries (response) {
   return {
     type: RACE_ENTRIES_RECEIVE_FETCH,
     entries: response.docs.map(val => val.doc)
+  };
+}
+export function dispatchClearRaceEntries () {
+  return {
+    type: RACE_ENTRIES_CLEAR
   };
 }
 
@@ -41,6 +47,11 @@ export function fetchRaceEntries () {
         dispatch(setError(errorSource, err));
       });
   };
+}
+
+// This just sets the state to PENDING to make sure we fetch them again.
+export function clearRaceEntries () {
+  return dispatch => dispatch(dispatchClearRaceEntries());
 }
 
 export const RACE_ENTRIES_REQUEST_PUT = 'RACE_ENTRIES_REQUEST_PUT';

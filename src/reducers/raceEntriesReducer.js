@@ -2,7 +2,7 @@
 
 import {
   RACE_ENTRIES_ERROR, RACE_ENTRIES_REQUEST_FETCH, RACE_ENTRIES_RECEIVE_FETCH, RACE_ENTRIES_REQUEST_PUT, RACE_ENTRIES_RECEIVE_PUT,
-  RACE_ENTRIES_REQUEST_DELETE, RACE_ENTRIES_RECEIVE_DELETE, RACE_ENTRIES_REQUEST_BY_BOATNUMBER, RACE_ENTRIES_RECIEVE_BY_BOATNUMBER
+  RACE_ENTRIES_REQUEST_DELETE, RACE_ENTRIES_RECEIVE_DELETE, RACE_ENTRIES_REQUEST_BY_BOATNUMBER, RACE_ENTRIES_RECIEVE_BY_BOATNUMBER, RACE_ENTRIES_CLEAR
 } from '../actions/raceEntriesAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
 
@@ -30,6 +30,11 @@ export default (state = initialState, action) => {
         ...state,
         entries_status: STATE_TRUE,
         entries: action.entries
+      };
+    case RACE_ENTRIES_CLEAR:
+      return {
+        ...state,
+        entries_status: STATE_PENDING
       };
     // case CONFIG_RECEIVE_FETCH:
     //   return {

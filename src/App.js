@@ -8,7 +8,7 @@ import Nav from 'react-bootstrap/Nav';
 import Alert from 'react-bootstrap/Alert';
 
 import { EntryForm } from './entryForm/EntryForm';
-import AllEntries from './allEntries/AllEntries';
+import AllEntriesWrapper from './allEntries/AllEntriesWrapper';
 import { AddResult } from './addResult/AddResult';
 import { AllResults } from './allResults/AllResults';
 import { PleaseWait } from './PleaseWait';
@@ -56,7 +56,7 @@ class App extends Component {
             </Nav>
           </Navbar>
           <Switch>
-            <Route path='/' exact component={AllEntries} />
+            <Route path='/' exact component={AllEntriesWrapper} />
             <Route path='/entry/:entryId' exact component={EntryForm} />
             <Route path='/results' exact component={AllResults} />
             <Route path='/result/:entryId' exact component={AddResult} />
