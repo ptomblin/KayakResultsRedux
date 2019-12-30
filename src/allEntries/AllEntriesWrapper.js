@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AllEntries from './AllEntries';
 import { fetchRaceEntries, clearRaceEntries } from '../actions/raceEntriesAction';
-import { STATE_PENDING } from '../configureDB';
+import { STATE_TRUE } from '../configureDB';
 import { PleaseWait } from '../PleaseWait';
 
 export class AllEntriesWrapper extends Component {
@@ -20,8 +20,7 @@ export class AllEntriesWrapper extends Component {
   }
 
   render () {
-    console.log('AllEntriesWrapper render, entries status = ' + this.props.entries_status);
-    if (this.props.entries_status === STATE_PENDING) {
+    if (this.props.entries_status !== STATE_TRUE) {
       return <PleaseWait />;
     }
     return <AllEntries />;
@@ -29,7 +28,6 @@ export class AllEntriesWrapper extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
   return {
     entries_status: state.raceEntriesReducer.entries_status
   };

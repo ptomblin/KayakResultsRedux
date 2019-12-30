@@ -28,6 +28,7 @@ export class AllEntries extends Component {
   }
 
   componentDidMount () {
+    console.log(this.props);
     const tbl = $(this.refs.main).DataTable({
       dom: '<"data-table-wrapper"t>pB',
       destroy: true,
@@ -55,11 +56,9 @@ export class AllEntries extends Component {
       ]
     });
     this.setState({ table: tbl });
-    console.log('AllEntries did mount, tbl = ' + tbl);
   }
 
   componentWillUnmount () {
-    console.log('AllEntries will unmount, table = ' + this.state.table);
     this.state.table.destroy(true);
     this.setState({ table: null });
   }
@@ -78,7 +77,6 @@ export class AllEntries extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
   return {
     entries: state.raceEntriesReducer.entries
   };

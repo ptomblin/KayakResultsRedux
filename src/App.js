@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 
 import Alert from 'react-bootstrap/Alert';
 
-import { EntryForm } from './entryForm/EntryForm';
+import EntryForm from './entryForm/EntryForm';
 import AllEntriesWrapper from './allEntries/AllEntriesWrapper';
 import { AddResult } from './addResult/AddResult';
 import { AllResults } from './allResults/AllResults';
@@ -36,7 +36,7 @@ class App extends Component {
               <Nav.Link as={NavLink} to='/' exact>
               All Entries
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/entry/:entryId' exact>
+              <Nav.Link as={NavLink} to='/entry/0' exact>
               Entry Form
               </Nav.Link>
               <Nav.Link as={NavLink} to='/results' exact>
