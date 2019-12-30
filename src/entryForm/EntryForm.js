@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -96,7 +97,7 @@ export class EntryForm extends Component {
             <Col sm={10}>
               <Button
                 variant='primary'
-                onClick={() => this.props.handleSave({ ...this.props.entry })}
+                onClick={() => this.props.handleSave({ ...this.props.entry }, this.props.entry_id)}
               >Save Entry
               </Button>
               <Button variant='danger'>Delete Entry</Button>
@@ -124,9 +125,12 @@ const mapDispatchToProps = dispatch => ({
   onChange: (fieldName, value) => {
     dispatch(changeRaceEntryField(fieldName, value));
   },
-  handleSave: (entry) => {
+  handleSave: (entry, entryId) => {
     console.log('handleSave');
     dispatch(endEditingRaceEntry(entry));
+    if (entryId !== '0') {
+      dispatch(push('/'));
+    }
   }
 });
 

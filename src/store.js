@@ -1,6 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware } from 'connected-react-router';
+
 import thunk from 'redux-thunk';
-import rootReducer from './reducers/rootReducer';
+import createRootReducer from './reducers/rootReducer';
+
+export const history = createBrowserHistory();
 
 const composeEnhancers =
   typeof window === 'object' &&
@@ -9,9 +14,13 @@ const composeEnhancers =
       trace: true
     }) : compose;
 
-export default function configureStore () {
-  return createStore(
-    rootReducer,
-    composeEnhancers(applyMiddleware(thunk))
+export default function configureStore (preloadedState) {
+  const store = createStore(
+    createRootReducer(history),
+    preloadedState,
+    composeEnhancers(applyMiddleware(
+      routerMiddleware(history),
+      thunk))
   );
+  return store;
 }

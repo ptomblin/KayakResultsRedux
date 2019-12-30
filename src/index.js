@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import configureStore from './store';
 import { fetchConfig } from './actions/configAction';
+import configureStore from './store';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';

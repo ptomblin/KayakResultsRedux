@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, NavLink, Route, Switch } from 'react-router-dom';
+import {
+  NavLink,
+  Route,
+  Switch
+} from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from './store';
 
 import { connect } from 'react-redux';
 import Navbar from 'react-bootstrap/Navbar';
@@ -23,7 +29,7 @@ class App extends Component {
     }
 
     return (
-      <Router>
+      <ConnectedRouter history={history}>
         <div>
           {Object.keys(this.props.errors).map(ekey => (
             <Alert variant='danger' key={ekey}>{this.props.errors[ekey]}</Alert>
@@ -64,7 +70,7 @@ class App extends Component {
             <Route component={PleaseWait} />
           </Switch>
         </div>
-      </Router>
+      </ConnectedRouter>
     );
   }
 }

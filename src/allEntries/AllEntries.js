@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 import Table from 'react-bootstrap/Table';
 
@@ -25,6 +26,14 @@ export class AllEntries extends Component {
   constructor (props) {
     super(props);
     this.state = { table: null };
+    this.onClick.bind(this);
+  }
+
+  onClick (e) {
+    console.log(this);
+    console.log(e);
+    console.log(this.state.table.row(e.target).data());
+    this.props.onClick(this.state.table.row(e.target).data()._id);
   }
 
   componentDidMount () {
@@ -56,6 +65,7 @@ export class AllEntries extends Component {
       ]
     });
     this.setState({ table: tbl });
+    tbl.on('click', 'tr', (e) => { this.onClick(e); });
   }
 
   componentWillUnmount () {
@@ -82,7 +92,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = dispatch => ({
-
+  onClick: (id) => {
+    dispatch(push('/entry/' + id));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllEntries);
