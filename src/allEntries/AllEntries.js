@@ -30,14 +30,10 @@ export class AllEntries extends Component {
   }
 
   onClick (e) {
-    console.log(this);
-    console.log(e);
-    console.log(this.state.table.row(e.target).data());
     this.props.onClick(this.state.table.row(e.target).data()._id);
   }
 
   componentDidMount () {
-    console.log(this.props);
     const tbl = $(this.refs.main).DataTable({
       dom: '<"data-table-wrapper"t>pB',
       destroy: true,

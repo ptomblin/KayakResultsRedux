@@ -211,6 +211,7 @@ const defaultEntry = {
 
 export function startEditingRaceEntry (id) {
   return dispatch => {
+    console.log('startEditingRaceEntry(' + id + ')');
     if (id !== '0') {
       dispatch(clearError(errorSource));
       dispatch(requestStartEditingRaceEntry());
@@ -221,6 +222,7 @@ export function startEditingRaceEntry (id) {
           dispatch(setError(errorSource, err.name === 'not_found' ? 'Given race entry not found' : err.message));
         });
     } else {
+      console.log('setEditingRaceEntry');
       dispatch(setEditingRaceEntry({ ...defaultEntry, _id: randId() }));
     }
   };

@@ -126,11 +126,14 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeRaceEntryField(fieldName, value));
   },
   handleSave: (entry, entryId) => {
-    console.log('handleSave');
-    dispatch(endEditingRaceEntry(entry));
-    if (entryId !== '0') {
-      dispatch(push('/'));
-    }
+    dispatch(endEditingRaceEntry(entry))
+      .then(() => {
+        if (entryId !== '0') {
+          dispatch(push('/'));
+        } else {
+          dispatch(startEditingRaceEntry(entryId));
+        }
+      });
   }
 });
 
