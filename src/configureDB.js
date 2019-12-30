@@ -21,7 +21,7 @@ const db = new PouchDB('kayak_results');
 
 db.createIndex({
   index: {
-    fields: ['boatnumber']
+    fields: ['type', 'boatnumber']
   }
 });
 db.createIndex({

@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import { PleaseWait } from '../PleaseWait';
 import { STATE_PENDING } from '../configureDB';
 
-import { startEditingRaceEntry, changeRaceEntryField, endEditingRaceEntry } from '../actions/raceEntriesAction';
+import { startEditingRaceEntry, changeRaceEntryField, endEditingRaceEntry, deleteEntry } from '../actions/raceEntriesAction';
 
 import AgeCategory from './AgeCategory';
 import GenderCategory from './GenderCategory';
@@ -19,6 +19,12 @@ import BoatCategory from './BoatCategory';
 export class EntryForm extends Component {
   componentDidMount () {
     this.props.onEntry(this.props.entry_id);
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.entry_id !== this.props.entry_id) {
+      this.props.handleReset(this.props.entry_id);
+    }
   }
 
   render () {
@@ -32,6 +38,11 @@ export class EntryForm extends Component {
       const bclass = bcat && bcat.classes.find(bc => bc.Name === this.props.entry.boatclass);
       hasCrew = bclass ? bclass.hasCrew : true;
     }
+
+    const boatNumberInValid = this.props.matches && this.props.matches.length === 1 && this.props.matches[0]._id !== this.props.entry._id;
+
+    const allowDelete = this.props.entry_id !== '0';
+
     return (
       <div>
         <Form>
@@ -89,7 +100,7 @@ export class EntryForm extends Component {
               />
             </Col>
           </Form.Group>
-          <BoatNumber />
+          <BoatNumber isInvalid={boatNumberInValid} />
           <AgeCategory hasCrew={hasCrew} />
           <GenderCategory hasCrew={hasCrew} />
           <BoatCategory />
@@ -100,8 +111,17 @@ export class EntryForm extends Component {
                 onClick={() => this.props.handleSave({ ...this.props.entry }, this.props.entry_id)}
               >Save Entry
               </Button>
-              <Button variant='danger'>Delete Entry</Button>
-              <Button variant='warning'>Clear Entry</Button>
+              <Button
+                variant='danger'
+                disabled={!allowDelete}
+                onClick={() => this.props.handleDelete(this.props.entry)}
+              >Delete Entry
+              </Button>
+              <Button
+                variant='warning'
+                onClick={() => this.props.handleReset(this.props.entry_id)}
+              >Clear Entry
+              </Button>
             </Col>
           </Form.Group>
         </Form>
@@ -115,7 +135,8 @@ const mapStateToProps = (state, ownProps) => {
     entry_id: ownProps.match.params.entryId,
     entry: state.raceEntriesReducer.entry,
     editing_status: state.raceEntriesReducer.editing_status,
-    config: state.configReducer.config
+    config: state.configReducer.config,
+    matches: state.raceEntriesReducer.matches
   };
 };
 const mapDispatchToProps = dispatch => ({
@@ -134,6 +155,13 @@ const mapDispatchToProps = dispatch => ({
           dispatch(startEditingRaceEntry(entryId));
         }
       });
+  },
+  handleDelete: (entry) => {
+    dispatch(deleteEntry(entry));
+    dispatch(push('/'));
+  },
+  handleReset: (entryId) => {
+    dispatch(startEditingRaceEntry(entryId));
   }
 });
 

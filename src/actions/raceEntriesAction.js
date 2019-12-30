@@ -126,10 +126,10 @@ export function receieveDeleteRaceEntry () {
 }
 
 // Deletes a given entry.
-export function pouchDeleteEntry (entry) {
+export function deleteEntry (entry) {
   return dispatch => {
     dispatch(requestDeleteRaceEntry());
-    return db.remove(entry._id, entry._rev)
+    return db.remove(entry)
       .then(res => dispatch(receieveDeleteRaceEntry()))
       .catch(err => dispatch(setError(errorSource, err)));
   };
@@ -146,7 +146,7 @@ export function requestByBoatNumberRaceEntry () {
 export function recieveByBoatNumberRaceEntry (docs) {
   return {
     type: RACE_ENTRIES_RECIEVE_BY_BOATNUMBER,
-    match: docs
+    matches: docs
   };
 }
 
@@ -155,9 +155,12 @@ export function getEntryByBoatNumber (boatNumber) {
   return dispatch => {
     dispatch(requestByBoatNumberRaceEntry());
     return db.find({
-      selector: { boatnumber: boatNumber }
+      selector: {
+        type: DOC_TYPE_ENTRIES,
+        boatnumber: boatNumber
+      }
     })
-      .then(res => dispatch(getEntryByBoatNumber(res.docs)))
+      .then(res => dispatch(recieveByBoatNumberRaceEntry(res.docs)))
       .catch(err => {
         dispatch(raceEntriesHasError());
         dispatch(setError(errorSource, err));
