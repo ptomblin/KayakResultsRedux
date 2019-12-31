@@ -169,7 +169,6 @@ export function getEntryByBoatNumber (boatNumber) {
 
 export const RACE_ENTRIES_REQUEST_START_EDITING = 'RACE_ENTRIES_REQUEST_START_EDITING';
 export const RACE_ENTRIES_START_EDITING = 'RACE_ENTRIES_START_EDITING';
-export const RACE_ENTRIES_EDITING_CHANGE_FIELD = 'RACE_ENTRIES_EDITING_CHANGE_FIELD';
 export const RACE_ENTRIES_EDITING_CHANGE_FIELDS = 'RACE_ENTRIES_EDITING_CHANGE_FIELDS';
 export const RACE_ENTRIES_END_EDITING = 'RACE_ENTRIES_END_EDITING';
 export function requestStartEditingRaceEntry () {
@@ -190,13 +189,7 @@ export function requestEndEditingRaceEntry (entry) {
   };
 }
 
-export function changeFieldRaceEntry (field, value) {
-  return {
-    type: RACE_ENTRIES_EDITING_CHANGE_FIELD,
-    field: field,
-    value: value
-  };
-} export function changeFieldRaceEntrys (fieldValues) {
+export function changeFieldRaceEntrys (fieldValues) {
   return {
     type: RACE_ENTRIES_EDITING_CHANGE_FIELDS,
     fieldValues: fieldValues

@@ -15,18 +15,23 @@ export class GenderCategory extends Component {
           Gender Categories
         </Form.Label>
         <Col sm={10}>
-          {this.props.gender_categories.map(ag => (
-            <Form.Check
-              inline
-              key={ag}
-              label={ag}
-              type='radio'
-              name='gender-category'
-              checked={ag === this.props.entry.gendercategory}
-              onChange={e => e.target.checked && this.props.onChange(ag)}
-              isInvalid={this.props.isInvalid}
-            />
-          ))}
+          {this.props.gender_categories.map(gc => {
+            console.log('gc.forCrew = ' + gc.forCrew + ', hasCrew = ' + this.props.hasCrew);
+            return (
+              <Form.Check
+                inline
+                key={gc.Name}
+                label={gc.Name}
+                type='radio'
+                name='gender-category'
+                disabled={!this.props.hasCrew && gc.forCrew}
+                checked={gc.Name === this.props.entry.gendercategory}
+                onChange={e => e.target.checked && this.props.onChange(gc.Name)}
+                isInvalid={this.props.isInvalid}
+              />
+            )
+            ;
+          })}
         </Col>
       </Form.Group>
     );

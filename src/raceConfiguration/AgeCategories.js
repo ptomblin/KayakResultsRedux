@@ -13,11 +13,19 @@ import { removeEntryFromAgeCategoryConfig, addEntryToAgeCategoryConfig } from '.
 class AgeCategories extends Component {
   constructor (props) {
     super(props);
-    this.state = { new_age_category: '' };
+    this.state = { new_age_category: { Name: '', forCrew: false } };
   }
 
   setAgeCategory (value) {
-    this.setState({ new_age_category: value });
+    this.setState({ new_age_category: { ...this.state.new_age_category, Name: value } });
+  }
+
+  setAgeCrew (value) {
+    this.setState({ new_age_category: { ...this.state.new_age_category, forCrew: value } });
+  }
+
+  setAgeCat (name, forCrew) {
+    this.setState({ new_age_category: { Name: name, forCrew: forCrew } });
   }
 
   render () {
@@ -28,8 +36,10 @@ class AgeCategories extends Component {
         </Form.Label>
         <ListGroup>
           {this.props.age_categories.map(ag => (
-            <ListGroup.Item key={ag}>
-              <div className='d-flex'><div className='flex-grow-1'>{ag}</div>
+            <ListGroup.Item key={ag.Name}>
+              <div className='d-flex'>
+                <div className='flex-grow-1'>{ag.Name}</div>
+                <div><Form.Check checked={ag.forCrew} label='For Crew' disabled /></div>
                 <div>
                   <FontAwesomeIcon
                     icon={faMinusCircle}
@@ -47,7 +57,16 @@ class AgeCategories extends Component {
                 <Form.Control
                   placeholder='New Age Category'
                   onChange={e => this.setAgeCategory(e.target.value)}
-                  value={this.state.new_age_category}
+                  value={this.state.new_age_category.Name}
+                />
+              </Col>
+              <Col sm={2}>
+                <Form.Check
+                  label='For Crew'
+                  inline
+                  type='checkbox'
+                  onChange={e => this.setAgeCrew(e.target.checked)}
+                  checked={this.state.new_age_category.forCrew}
                 />
               </Col>
               <Col>
@@ -55,7 +74,7 @@ class AgeCategories extends Component {
                   variant='primary'
                   onClick={() => {
                     this.props.onAddCategory(this.state.new_age_category);
-                    this.setAgeCategory('');
+                    this.setAgeCat('', false);
                   }}
                 >Add New Age Category
                 </Button>

@@ -18,12 +18,13 @@ export class AgeCategory extends Component {
           {this.props.age_categories.map(ag => (
             <Form.Check
               inline
-              key={ag}
-              label={ag}
+              key={ag.Name}
+              label={ag.Name}
               type='radio'
               name='age-category'
-              checked={ag === this.props.entry.agecategory}
-              onChange={e => e.target.checked && this.props.onChange(ag)}
+              disabled={!this.props.hasCrew && ag.forCrew}
+              checked={ag.Name === this.props.entry.agecategory}
+              onChange={e => e.target.checked && this.props.onChange(ag.Name)}
               isInvalid={this.props.isInvalid}
             />
           ))}

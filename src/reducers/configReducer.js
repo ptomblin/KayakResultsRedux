@@ -6,6 +6,7 @@ import {
   CONFIG_ADD_TO_BOAT_CLASS, CONFIG_REMOVE_FROM_BOAT_CLASS, CONFIG_UPDATE_RACE_NAME, CONFIG_UPDATE_RACE_DATE
 } from '../actions/configAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
+import { config } from '@fortawesome/fontawesome-svg-core';
 
 const initialState = {
   config_found: STATE_PENDING,
@@ -18,14 +19,14 @@ const defaultRaceConfig = {
   race_name: 'Round The Mountain 2020',
   race_date: '2020/04/20',
   age_categories: [
-    'Under 50',
-    'Over 50',
-    'Mixed'
+    { Name: 'Under 50', forCrew: false },
+    { Name: 'Over 50', forCrew: false },
+    { Name: 'Mixed', forCrew: true }
   ],
   gender_categories: [
-    'Male',
-    'Female',
-    'Mixed'
+    { Name: 'Male', forCrew: false },
+    { Name: 'Female', forCrew: false },
+    { Name: 'Mixed', forCrew: true }
   ],
   boat_categories: [
     {
@@ -123,11 +124,19 @@ export default (state = initialState, action) => {
         config_found: STATE_PENDING
       };
     case CONFIG_RECEIVE_FETCH:
+    {
+      let config;
+      if (action.config) {
+        config = action.config;
+        config.age_categories = config.age_categories.map(ac => (typeof (ac) === 'string') ? { Name: ac, forCrew: false } : ac);
+        config.gender_categories = config.gender_categories.map(gc => (typeof (gc) === 'string') ? { Name: gc, forCrew: false } : gc);
+      }
       return {
         ...state,
-        config: action.config,
+        config: config,
         config_found: action.config ? STATE_TRUE : STATE_FALSE
       };
+    }
     case CONFIG_ERROR:
       return {
         ...state,
