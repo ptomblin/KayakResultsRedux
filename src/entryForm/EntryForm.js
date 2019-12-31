@@ -17,8 +17,14 @@ import BoatNumber from './BoatNumber';
 import BoatCategory from './BoatCategory';
 
 export class EntryForm extends Component {
+  constructor (props) {
+    super(props);
+    this.state = { validated: false };
+  }
+
   componentDidMount () {
     this.props.onEntry(this.props.entry_id);
+    this.setState({ validated: false });
   }
 
   componentDidUpdate (prevProps) {
@@ -39,7 +45,17 @@ export class EntryForm extends Component {
       hasCrew = bclass ? bclass.hasCrew : true;
     }
 
-    const boatNumberInValid = this.props.matches && this.props.matches.length === 1 && this.props.matches[0]._id !== this.props.entry._id;
+    const invalidP1Name = this.props.entry.p1name === '';
+    const invalidP2Name = hasCrew ? this.props.entry.p2name === '' : this.props.entry.p2name !== '';
+    const invalidP1Addr = this.props.entry.p2name === '';
+
+    const invalidBoatNumber = this.props.matches && this.props.matches.length === 1 && this.props.matches[0]._id !== this.props.entry._id;
+
+    const invalidAgeCategory = this.props.entry.agecategory !== '';
+    const invalidGenderCategory = this.props.entry.gendercategory !== '';
+    const invalidBoatClass = this.props.entry.boatclass !== '';
+
+    const anyInvalid = invalidP1Name || invalidP2Name || invalidP1Addr || invalidBoatNumber || this.props.entry.boatnumber || invalidAgeCategory || invalidGenderCategory || invalidBoatClass;
 
     const allowDelete = this.props.entry_id !== '0';
 
@@ -59,6 +75,7 @@ export class EntryForm extends Component {
                 type='text'
                 placeholder="Captain's name"
                 value={this.props.entry.p1name}
+                isInvalid={this.state.validated && invalidP1Name}
                 onChange={e => this.props.onChange('p1name', e.target.value)}
               />
             </Col>
@@ -70,6 +87,7 @@ export class EntryForm extends Component {
                 type='text'
                 placeholder='Crew Name(s)'
                 value={this.props.entry.p2name}
+                isInvalid={this.state.validated && invalidP2Name}
                 disabled={!hasCrew}
                 onChange={e => this.props.onChange('p2name', e.target.value)}
               />
@@ -84,6 +102,7 @@ export class EntryForm extends Component {
                 type='text'
                 placeholder="Captain's Town/State"
                 value={this.props.entry.p1addr2}
+                isInvalid={this.state.validated && invalidP1Addr}
                 onChange={e => this.props.onChange('p1addr2', e.target.value)}
               />
             </Col>
@@ -100,15 +119,22 @@ export class EntryForm extends Component {
               />
             </Col>
           </Form.Group>
-          <BoatNumber isInvalid={boatNumberInValid} />
-          <AgeCategory hasCrew={hasCrew} />
-          <GenderCategory hasCrew={hasCrew} />
+          <BoatNumber isInvalid={invalidBoatNumber || (this.state.validated && this.props.entry.boatnumber === '')} />
+          <AgeCategory hasCrew={hasCrew} isInvalid={this.state.validated && invalidAgeCategory} />
+          <GenderCategory hasCrew={hasCrew} isInvalid={this.state.validated && invalidGenderCategory} />
           <BoatCategory />
           <Form.Group as={Row}>
             <Col sm={10}>
               <Button
                 variant='primary'
-                onClick={() => this.props.handleSave({ ...this.props.entry }, this.props.entry_id)}
+                onClick={() => {
+                  if (anyInvalid) {
+                    return this.setState({ validated: true });
+                  } else {
+                    this.setState({ validated: false });
+                    return this.props.handleSave({ ...this.props.entry }, this.props.entry_id);
+                  }
+                }}
               >Save Entry
               </Button>
               <Button
