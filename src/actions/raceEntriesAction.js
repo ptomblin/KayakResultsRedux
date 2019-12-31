@@ -20,7 +20,6 @@ export function requestFetchRaceEntries () {
   };
 }
 export function receiveFetchRaceEntries (response) {
-  console.log(response);
   return {
     type: RACE_ENTRIES_RECEIVE_FETCH,
     entries: response.docs
@@ -171,6 +170,7 @@ export function getEntryByBoatNumber (boatNumber) {
 export const RACE_ENTRIES_REQUEST_START_EDITING = 'RACE_ENTRIES_REQUEST_START_EDITING';
 export const RACE_ENTRIES_START_EDITING = 'RACE_ENTRIES_START_EDITING';
 export const RACE_ENTRIES_EDITING_CHANGE_FIELD = 'RACE_ENTRIES_EDITING_CHANGE_FIELD';
+export const RACE_ENTRIES_EDITING_CHANGE_FIELDS = 'RACE_ENTRIES_EDITING_CHANGE_FIELDS';
 export const RACE_ENTRIES_END_EDITING = 'RACE_ENTRIES_END_EDITING';
 export function requestStartEditingRaceEntry () {
   return {
@@ -189,11 +189,17 @@ export function requestEndEditingRaceEntry (entry) {
     entry: entry
   };
 }
+
 export function changeFieldRaceEntry (field, value) {
   return {
     type: RACE_ENTRIES_EDITING_CHANGE_FIELD,
     field: field,
     value: value
+  };
+} export function changeFieldRaceEntrys (fieldValues) {
+  return {
+    type: RACE_ENTRIES_EDITING_CHANGE_FIELDS,
+    fieldValues: fieldValues
   };
 }
 const randId = () => (new Date()).getTime().toString();
@@ -214,7 +220,6 @@ const defaultEntry = {
 
 export function startEditingRaceEntry (id) {
   return dispatch => {
-    console.log('startEditingRaceEntry(' + id + ')');
     if (id !== '0') {
       dispatch(clearError(errorSource));
       dispatch(requestStartEditingRaceEntry());
@@ -225,19 +230,22 @@ export function startEditingRaceEntry (id) {
           dispatch(setError(errorSource, err.name === 'not_found' ? 'Given race entry not found' : err.message));
         });
     } else {
-      console.log('setEditingRaceEntry');
       dispatch(setEditingRaceEntry({ ...defaultEntry, _id: randId() }));
     }
   };
 }
 export function changeRaceEntryField (field, value) {
   return dispatch => {
-    dispatch(changeFieldRaceEntry(field, value));
+    dispatch(changeFieldRaceEntrys({ [field]: value }));
+  };
+}
+export function changeRaceEntryFields (fieldValues) {
+  return dispatch => {
+    dispatch(changeFieldRaceEntrys(fieldValues));
   };
 }
 export function endEditingRaceEntry (doc) {
   return dispatch => {
-    console.log(doc);
     dispatch(clearError(errorSource));
     return db.put(doc)
       .then(doc => dispatch(requestEndEditingRaceEntry({ ...defaultEntry, _id: randId() })))

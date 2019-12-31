@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import { changeRaceEntryField } from '../actions/raceEntriesAction';
+import { changeRaceEntryFields } from '../actions/raceEntriesAction';
 
 export class BoatCategory extends Component {
   makeCategory (cat, cls) {
@@ -18,6 +18,7 @@ export class BoatCategory extends Component {
         name='boat-classes'
         checked={cl.Name === this.props.entry.boatclass && cat === this.props.entry.boatcategory}
         onChange={e => e.target.checked && this.props.onChange(cat, cl.Name)}
+        isInvalid={this.props.isInvalid}
       />
     ));
   }
@@ -47,13 +48,13 @@ const mapStateToProps = (state, ownProps) => {
   return {
     entry: state.raceEntriesReducer.entry,
     boat_categories: state.configReducer.config.boat_categories,
-    hasCrew: ownProps.hasCrew
+    hasCrew: ownProps.hasCrew,
+    isInvalid: ownProps.isInvalid
   };
 };
 const mapDispatchToProps = dispatch => ({
   onChange: (cat, cls) => {
-    dispatch(changeRaceEntryField('boatcategory', cat));
-    dispatch(changeRaceEntryField('boatclass', cls));
+    dispatch(changeRaceEntryFields({ boatcategory: cat, boatclass: cls }));
   }
 });
 

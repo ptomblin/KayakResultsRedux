@@ -24,6 +24,7 @@ export class AgeCategory extends Component {
               name='age-category'
               checked={ag === this.props.entry.agecategory}
               onChange={e => e.target.checked && this.props.onChange(ag)}
+              isInvalid={this.props.isInvalid}
             />
           ))}
         </Col>
@@ -36,7 +37,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     entry: state.raceEntriesReducer.entry,
     age_categories: state.configReducer.config.age_categories,
-    hasCrew: ownProps.hasCrew
+    hasCrew: ownProps.hasCrew,
+    isInvalid: ownProps.isInvalid
   };
 };
 const mapDispatchToProps = dispatch => ({

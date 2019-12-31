@@ -29,7 +29,6 @@ export class BoatNumber extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
   return {
     entry: state.raceEntriesReducer.entry,
     matches: state.raceEntriesReducer.matches,
