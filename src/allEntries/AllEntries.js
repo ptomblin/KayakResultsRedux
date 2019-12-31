@@ -25,16 +25,16 @@ const columns = [
 export class AllEntries extends Component {
   constructor (props) {
     super(props);
-    this.state = { table: null };
+    this.tbl = null;
     this.onClick.bind(this);
   }
 
   onClick (e) {
-    this.props.onClick(this.state.table.row(e.target).data()._id);
+    this.props.onClick(this.tbl.row(e.target).data()._id);
   }
 
   componentDidMount () {
-    const tbl = $(this.refs.main).DataTable({
+    this.tbl = $(this.refs.main).DataTable({
       dom: '<"data-table-wrapper"t>pB',
       destroy: true,
       select: true,
@@ -60,13 +60,12 @@ export class AllEntries extends Component {
         'csvHtml5'
       ]
     });
-    this.setState({ table: tbl });
-    tbl.on('click', 'tr', (e) => { this.onClick(e); });
+    this.tbl.on('click', 'tr', (e) => { this.onClick(e); });
   }
 
   componentWillUnmount () {
-    this.state.table.destroy(true);
-    this.setState({ table: null });
+    this.tbl.destroy(true);
+    this.tbl = null;
   }
 
   shouldComponentUpdate () {

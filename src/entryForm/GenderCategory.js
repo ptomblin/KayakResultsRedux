@@ -16,7 +16,6 @@ export class GenderCategory extends Component {
         </Form.Label>
         <Col sm={10}>
           {this.props.gender_categories.map(gc => {
-            console.log('gc.forCrew = ' + gc.forCrew + ', hasCrew = ' + this.props.hasCrew);
             return (
               <Form.Check
                 inline

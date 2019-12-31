@@ -142,9 +142,10 @@ export function requestByBoatNumberRaceEntry () {
     type: RACE_ENTRIES_REQUEST_BY_BOATNUMBER
   };
 }
-export function recieveByBoatNumberRaceEntry (docs) {
+export function recieveByBoatNumberRaceEntry (boatNumber, docs) {
   return {
     type: RACE_ENTRIES_RECIEVE_BY_BOATNUMBER,
+    boat_number: boatNumber,
     matches: docs
   };
 }
@@ -159,7 +160,7 @@ export function getEntryByBoatNumber (boatNumber) {
         boatnumber: boatNumber
       }
     })
-      .then(res => dispatch(recieveByBoatNumberRaceEntry(res.docs)))
+      .then(res => dispatch(recieveByBoatNumberRaceEntry(boatNumber, res.docs)))
       .catch(err => {
         dispatch(raceEntriesHasError());
         dispatch(setError(errorSource, err));

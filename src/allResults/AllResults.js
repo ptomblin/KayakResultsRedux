@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
 import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
@@ -25,51 +28,102 @@ const columns = [
   { title: 'Addr 2', data: 'p2addr2', width: '10%' }
 ];
 
-// test only:
-const data = [
-  {
-    category: 'Kayak K-1 Unlimited Over 50 Male',
-    result: '01:20:01',
-    position: '1',
-    behindLeader: '00:00:00',
-    behindPrev: '00:00:00',
-    boatnumber: '72',
-    p1name: 'Paul Tomblin',
-    p1addr2: 'Rochester/NY',
-    p2name: '',
-    p2addr2: ''
-  },
-  {
-    category: 'Kayak K-1 Unlimited Over 50 Male',
-    result: '01:22:21',
-    position: '2',
-    behindLeader: '00:02:20',
-    behindPrev: '00:02:20',
-    boatnumber: '1',
-    p1name: 'Mike Finear',
-    p1addr2: 'Rochester/NY',
-    p2name: '',
-    p2addr2: ''
+var initDate = new Date(2000, 1, 1);
+initDate.setUTCHours(0);
+initDate.setUTCMinutes(0);
+initDate.setUTCSeconds(0);
+initDate.setUTCMinutes(0);
 
-  },
-  {
-    category: 'Kayak K-2 Mixed Male',
-    result: '01:02:21',
-    position: '1',
-    behindLeader: '00:00:00',
-    behindPrev: '00:00:00',
-    boatnumber: '1',
-    p1name: 'Paddler One',
-    p1addr2: 'Rochester/NY',
-    p2name: 'Paddler Two',
-    p2addr2: ''
-
+function hhmmssToDate (str) {
+  var d = new Date(initDate.getTime());
+  var numbers = str.match(/[\d.]+/g).map(Number);
+  d.setUTCSeconds(numbers.pop());
+  if (numbers.length > 0) {
+    d.setUTCMinutes(numbers.pop());
   }
-];
+  if (numbers.length > 0) {
+    d.setUTCHours(numbers.pop());
+  }
+  return d;
+}
+
+function millisecondsToHHMMSS (num) {
+  var seconds = Math.round(num / 1000);
+  var hours = Math.floor(seconds / (60 * 60));
+  var divMins = seconds % (60 * 60);
+  var mins = Math.floor(divMins / 60);
+  var secs = Math.ceil(divMins % 60);
+  return ('00' + hours).slice(-2) + ':' + ('00' + mins).slice(-2) + ':' + ('00' + secs).slice(-2);
+}
 
 export class AllResults extends Component {
+  constructor (props) {
+    super(props);
+    this.tbl = null;
+    this.onClick.bind(this);
+  }
+
+  onClick (e) {
+    this.props.onClick(this.tbl.row(e.target).data().boatnumber);
+  }
+
+  getBestTimes (timeStorage, useCategory, doc) {
+    const cat = !useCategory ? 'all' : doc.category;
+    if (!(cat in timeStorage)) {
+      timeStorage[cat] = {
+        bestTime: doc.resDate,
+        prevTime: doc.resDate,
+        currentPos: 1
+      };
+    }
+    if (!useCategory && !(doc.category in timeStorage)) {
+      timeStorage[doc.category] = {
+        currentPos: 1
+      };
+    }
+    const prevTime = timeStorage[cat].prevTime;
+    timeStorage[cat].prevTime = doc.resDate;
+
+    return [timeStorage[cat].bestTime, prevTime, timeStorage[doc.category].currentPos++];
+  }
+
   componentDidMount () {
-    $(this.refs.main).DataTable({
+    console.log('componentDidMount');
+    const timeStorage = {};
+    const useCategory = true; // Need to track the radio button bar instead
+    const results = this.props.entries
+      .map(doc => ({ ...doc, resDate: doc.result ? hhmmssToDate(doc.result) : null }))
+      .sort((a, b) => {
+        if (useCategory && a.category < b.category) return -1;
+        if (useCategory && a.category > b.category) return 1;
+        if (a.resDate && b.resDate) return a.resDate - b.resDate;
+        if (a.result) return -1;
+        if (b.result) return 1;
+        return 0;
+      })
+      .map(doc => {
+        const docCopy = { ...doc };
+        if (doc.resDate) {
+          var values = this.getBestTimes(timeStorage, useCategory, doc);
+          var bestTime = values[0];
+          var prevTime = values[1];
+          var currentPos = values[2];
+
+          docCopy.position = currentPos;
+          docCopy.result = millisecondsToHHMMSS(hhmmssToDate(doc.result) - initDate);
+          docCopy.behindLeader = millisecondsToHHMMSS(doc.resDate - bestTime);
+          docCopy.behindPrev = millisecondsToHHMMSS(doc.resDate - prevTime);
+        } else {
+          docCopy.position = '-';
+          docCopy.result = 'NF';
+          docCopy.behindLeader = '-';
+          docCopy.behindPrev = '-';
+        }
+        return docCopy;
+      });
+    console.log(results);
+
+    this.tbl = $(this.refs.main).DataTable({
       dom: '<"data-table-wrapper"t>pB',
       destroy: true,
       select: true,
@@ -79,7 +133,7 @@ export class AllResults extends Component {
       orderFixed: [
         [0, 'asc']
       ],
-      data: data,
+      data: results,
       columns,
       searching: false,
       lengthChange: true,
@@ -95,13 +149,15 @@ export class AllResults extends Component {
         'csvHtml5'
       ]
     });
+    this.tbl.on('click', 'tr', (e) => { this.onClick(e); });
+    console.log('didMount finishing');
+    console.log(this.tbl);
   }
 
   componentWillUnmount () {
-    $('.data-table-wrapper')
-      .find('table')
-      .DataTable()
-      .destroy(true);
+    console.log('will unmount');
+    this.tbl.destroy(true);
+    this.tbl = null;
   }
 
   shouldComponentUpdate () {
@@ -123,3 +179,16 @@ export class AllResults extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    entries: state.raceEntriesReducer.entries
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  onClick: (id) => {
+    dispatch(push('/result/' + id));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllResults);

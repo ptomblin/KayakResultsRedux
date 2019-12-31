@@ -15,8 +15,8 @@ import Alert from 'react-bootstrap/Alert';
 
 import EntryForm from './entryForm/EntryForm';
 import AllEntriesWrapper from './allEntries/AllEntriesWrapper';
-import { AddResult } from './addResult/AddResult';
-import { AllResults } from './allResults/AllResults';
+import AllResultsWrapper from './allResults/AllResultsWrapper';
+import AddResult from './addResult/AddResult';
 import { PleaseWait } from './PleaseWait';
 import { STATE_PENDING } from './configureDB';
 import RaceConfiguration from './raceConfiguration/RaceConfiguration';
@@ -48,7 +48,7 @@ class App extends Component {
               <Nav.Link as={NavLink} to='/results' exact>
               All Results
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/result/:entryId' exact>
+              <Nav.Link as={NavLink} to='/result/0' exact>
               Add Result
               </Nav.Link>
             </Nav>
@@ -64,8 +64,8 @@ class App extends Component {
           <Switch>
             <Route path='/' exact component={AllEntriesWrapper} />
             <Route path='/entry/:entryId' exact component={EntryForm} />
-            <Route path='/results' exact component={AllResults} />
-            <Route path='/result/:entryId' exact component={AddResult} />
+            <Route path='/results' exact component={AllResultsWrapper} />
+            <Route path='/result/:boatNumber' exact component={AddResult} />
             <Route path='/raceConfiguration' exact component={RaceConfiguration} />
             <Route component={PleaseWait} />
           </Switch>

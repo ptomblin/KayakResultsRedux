@@ -6,13 +6,16 @@ import {
   RACE_ENTRIES_REQUEST_DELETE, RACE_ENTRIES_RECEIVE_DELETE,
   RACE_ENTRIES_REQUEST_BY_BOATNUMBER, RACE_ENTRIES_RECIEVE_BY_BOATNUMBER
 } from '../actions/raceEntriesAction';
-import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
+import { STATE_PENDING, STATE_TRUE, STATE_ERROR } from '../configureDB';
 
 const initialState = {
   entries: [],
   entries_status: STATE_PENDING,
   editing_status: STATE_PENDING,
-  fetching_status: STATE_PENDING
+  fetching_status: STATE_PENDING,
+  matches: [],
+  boat_number: '',
+  result: ''
 };
 
 export default (state = initialState, action) => {
@@ -85,13 +88,15 @@ export default (state = initialState, action) => {
     case RACE_ENTRIES_REQUEST_BY_BOATNUMBER:
       return {
         ...state,
-        fetching_status: STATE_PENDING
+        fetching_status: STATE_PENDING,
+        matches: []
       };
     case RACE_ENTRIES_RECIEVE_BY_BOATNUMBER:
       return {
         ...state,
         fetching_status: STATE_TRUE,
-        matches: action.matches
+        matches: action.matches,
+        boat_number: action.boat_number
       };
     default:
       return state;

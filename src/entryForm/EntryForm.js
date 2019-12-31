@@ -126,10 +126,8 @@ export class EntryForm extends Component {
                 variant='primary'
                 onClick={() => {
                   if (anyInvalid) {
-                    console.log('invalid');
                     return this.setState({ validated: true });
                   } else {
-                    console.log('huh');
                     this.setState({ validated: false });
                     return this.props.handleSave({ ...this.props.entry }, this.props.entry_id);
                   }
@@ -159,7 +157,6 @@ export class EntryForm extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state.raceEntriesReducer);
   const entry = state.raceEntriesReducer.entry;
   const config = state.configReducer.config;
   let hasCrew = true;

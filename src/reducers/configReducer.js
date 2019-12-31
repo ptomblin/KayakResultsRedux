@@ -6,7 +6,6 @@ import {
   CONFIG_ADD_TO_BOAT_CLASS, CONFIG_REMOVE_FROM_BOAT_CLASS, CONFIG_UPDATE_RACE_NAME, CONFIG_UPDATE_RACE_DATE
 } from '../actions/configAction';
 import { STATE_PENDING, STATE_TRUE, STATE_FALSE, STATE_ERROR } from '../configureDB';
-import { config } from '@fortawesome/fontawesome-svg-core';
 
 const initialState = {
   config_found: STATE_PENDING,
