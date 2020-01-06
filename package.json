@@ -38,6 +38,7 @@
     "typescript": "^3.7.4"
   },
   "scripts": {
+    "checkbuild": "es-check es5 './build/**/*.js'",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
