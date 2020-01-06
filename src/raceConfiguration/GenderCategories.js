@@ -34,7 +34,7 @@ class GenderCategories extends Component {
         <Form.Label column sm={2}>
           Gender Categories
         </Form.Label>
-        <ListGroup>
+        <ListGroup className='col-sm-9'>
           {this.props.gender_categories.map(gc => (
             <ListGroup.Item key={gc.Name}>
               <div className='d-flex'>

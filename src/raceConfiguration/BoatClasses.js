@@ -66,7 +66,7 @@ class BoatClasses extends Component {
         <Form.Label column sm={2}>
           Boat Classes
         </Form.Label>
-        <ListGroup className='col-sm-8'>
+        <ListGroup className='col-sm-9'>
           {this.props.boat_categories.map(bcat => (
             <ListGroup.Item key={bcat.category}>
               <div className='d-flex'>

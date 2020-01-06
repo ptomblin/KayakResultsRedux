@@ -34,7 +34,7 @@ class AgeCategories extends Component {
         <Form.Label column sm={2}>
           Age Categories
         </Form.Label>
-        <ListGroup>
+        <ListGroup className='col-sm-9'>
           {this.props.age_categories.map(ag => (
             <ListGroup.Item key={ag.Name}>
               <div className='d-flex'>
