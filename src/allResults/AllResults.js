@@ -64,7 +64,11 @@ export class AllResults extends Component {
   }
 
   onClick (e) {
-    this.props.onClick(this.tbl.row(e.target).data().boatnumber);
+    const data = this.tbl.row(e.target).data();
+    const boatnumber = data ? data.boatnumber : undefined;
+    if (boatnumber) {
+      this.props.onClick(boatnumber);
+    }
   }
 
   getBestTimes (timeStorage, useCategory, doc) {

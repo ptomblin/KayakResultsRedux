@@ -89,7 +89,7 @@ class GenderCategories extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    gender_categories: state.configReducer.config.gender_categories
+    gender_categories: state.configReducer.config.gender_categories || []
   };
 };
 const mapDispatchToProps = dispatch => ({

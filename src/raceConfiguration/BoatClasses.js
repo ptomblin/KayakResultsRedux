@@ -145,7 +145,7 @@ class BoatClasses extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    boat_categories: state.configReducer.config.boat_categories
+    boat_categories: state.configReducer.config.boat_categories || []
   };
 };
 const mapDispatchToProps = dispatch => ({

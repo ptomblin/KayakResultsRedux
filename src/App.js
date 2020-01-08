@@ -29,7 +29,7 @@ class App extends Component {
     }
 
     return (
-      <ConnectedRouter history={history}>
+      <ConnectedRouter history={history} basename={window.location.pathname}>
         <div>
           {Object.keys(this.props.errors).map(ekey => (
             <Alert variant='danger' key={ekey}>{this.props.errors[ekey]}</Alert>

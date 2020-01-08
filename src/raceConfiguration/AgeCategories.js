@@ -89,7 +89,7 @@ class AgeCategories extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    age_categories: state.configReducer.config.age_categories
+    age_categories: state.configReducer.config.age_categories || []
   };
 };
 const mapDispatchToProps = dispatch => ({

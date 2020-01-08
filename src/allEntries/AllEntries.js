@@ -30,7 +30,11 @@ export class AllEntries extends Component {
   }
 
   onClick (e) {
-    this.props.onClick(this.tbl.row(e.target).data()._id);
+    const data = this.tbl.row(e.target).data();
+    const id = data ? data._id : undefined;
+    if (id) {
+      this.props.onClick(id);
+    }
   }
 
   componentDidMount () {
