@@ -53,7 +53,6 @@ export class AddResult extends Component {
     const anyInvalid = invalidBoatNumber || invalidResult;
 
     const extraClass = invalidBoatNumber ? '' : 'readonly-highlight';
-    console.log('anyInvalid = ' + anyInvalid);
 
     return (
       <div>
@@ -92,7 +91,7 @@ export class AddResult extends Component {
                     return this.setState({ validated: true });
                   } else {
                     this.setState({ validated: false, result: '' });
-                    return this.props.handleSave({ ...this.props.match, result: this.state.result }, this.props.editing_boat_number);
+                    return this.props.handleSave({ ...this.props.match, result: this.state.result }, this.props.entry_boat_number);
                   }
                 }}
               >Save Result
@@ -136,7 +135,7 @@ const mapStateToProps = (state, ownProps) => {
   const matches = state.raceEntriesReducer.matches;
   const currentMatch = (!matches || matches.length !== 1) ? defaultMatch : matches[0];
   return {
-    entry_boat_number: ownProps.match.params.boatNumber,
+    entry_boat_number: ownProps.match.params.boatNumber || '',
     fetching_status: state.raceEntriesReducer.fetching_status,
     match: currentMatch,
     editing_boat_number: !state.raceEntriesReducer.boat_number || state.raceEntriesReducer.boat_number === '0' ? '' : state.raceEntriesReducer.boat_number,
@@ -148,10 +147,10 @@ const mapDispatchToProps = dispatch => ({
   handleSave: (entry, boatNumber) => {
     dispatch(endEditingRaceEntry(entry))
       .then(() => {
-        if (boatNumber !== '0') {
+        if (boatNumber !== '') {
           dispatch(push('/results'));
         } else {
-          dispatch(getEntryByBoatNumber('0'));
+          dispatch(getEntryByBoatNumber(''));
         }
       });
   },

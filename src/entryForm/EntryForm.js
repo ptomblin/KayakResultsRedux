@@ -54,7 +54,7 @@ export class EntryForm extends Component {
 
     const anyInvalid = invalidP1Name || invalidP2Name || invalidP1Addr || invalidBoatNumber || (this.props.entry.boatnumber === '') || invalidAgeCategory || invalidGenderCategory || invalidBoatClass;
 
-    const allowDelete = this.props.entry_id !== '0';
+    const allowDelete = this.props.entry_id !== '';
 
     return (
       <div>
@@ -146,7 +146,7 @@ export class EntryForm extends Component {
                   this.props.handleReset(this.props.entry_id);
                   this.setState({ validated: false });
                 }}
-              >Clear Entry
+              >Reset Entry
               </Button>
             </Col>
           </Form.Group>
@@ -167,7 +167,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    entry_id: ownProps.match.params.entryId,
+    entry_id: ownProps.match.params.entryId || '',
     entry: entry,
     editing_status: state.raceEntriesReducer.editing_status,
     config: config,

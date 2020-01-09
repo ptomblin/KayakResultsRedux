@@ -42,13 +42,13 @@ class App extends Component {
               <Nav.Link as={NavLink} to='/' exact>
               All Entries
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/entry/0' exact>
+              <Nav.Link as={NavLink} to='/entry/'>
               Entry Form
               </Nav.Link>
               <Nav.Link as={NavLink} to='/results' exact>
               All Results
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/result/0' exact>
+              <Nav.Link as={NavLink} to='/result/'>
               Add Result
               </Nav.Link>
             </Nav>
@@ -64,8 +64,10 @@ class App extends Component {
           <Switch>
             <Route path='/' exact component={AllEntriesWrapper} />
             <Route path='/entry/:entryId' exact component={EntryForm} />
+            <Route path='/entry/' exact component={EntryForm} />
             <Route path='/results' exact component={AllResultsWrapper} />
             <Route path='/result/:boatNumber' exact component={AddResult} />
+            <Route path='/result/' exact component={AddResult} />
             <Route path='/raceConfiguration' exact component={RaceConfiguration} />
             <Route component={PleaseWait} />
           </Switch>

@@ -214,7 +214,7 @@ const defaultEntry = {
 
 export function startEditingRaceEntry (id) {
   return dispatch => {
-    if (id !== '0') {
+    if (id !== '') {
       dispatch(clearError(errorSource));
       dispatch(requestStartEditingRaceEntry());
       return db.get(id)
